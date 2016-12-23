@@ -1,9 +1,10 @@
-package com.inocybe.poc
+package com.inocybe.poc.core
 
 import akka.actor.ActorSystem
 import akka.http.scaladsl.Http
 import akka.stream.ActorMaterializer
 import akka.util.Timeout
+import com.inocybe.poc.api.OrderService
 
 import scala.concurrent.duration._
 

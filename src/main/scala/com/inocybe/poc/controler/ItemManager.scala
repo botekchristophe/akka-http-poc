@@ -1,6 +1,8 @@
-package com.inocybe.poc
+package com.inocybe.poc.controler
 
 import akka.actor.Actor
+import com.inocybe.poc.api.Service.{ItemCreated, ItemInfo}
+import com.inocybe.poc.model.Item
 
 class ItemManager extends Actor {
 
@@ -8,10 +10,10 @@ class ItemManager extends Actor {
 
   override def receive: Receive = {
     case id: Long                   =>
-      sender ! Item(id, items(id))
+      sender ! ItemInfo(Item(id, items(id)))
 
     case i: Item =>
       items.put(i.id, i.name)
-      sender ! s"Added ${i.id} -> ${i.name} to items"
+      sender ! ItemCreated(i)
   }
 }
