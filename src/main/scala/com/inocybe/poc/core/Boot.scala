@@ -5,6 +5,7 @@ import akka.http.scaladsl.Http
 import akka.stream.ActorMaterializer
 import akka.util.Timeout
 import com.inocybe.poc.api.ItemService
+import com.inocybe.poc.datastore.neo4j.SchemaInitializer
 
 import scala.concurrent.duration._
 
@@ -12,6 +13,8 @@ object Boot {
 
 
   def main(args: Array[String]) {
+
+    SchemaInitializer.init()
 
     implicit val system = ActorSystem()
 

@@ -24,8 +24,6 @@ object ItemManager {
 }
 class ItemManager extends Controler {
 
-
-  val items = scala.collection.mutable.HashMap.empty[Long, String]
   lazy val gitlabConnector = ActorRegistry.getActor(classOf[GitlabConnector], context)
 
   override def receive: Receive = {
@@ -42,14 +40,24 @@ class ItemManager extends Controler {
       sender ! ItemsInfo(vertices)
 
     case GetItem(itemId: String) =>
-      val graph = new NeoGraph()
-      val item = graph.getVertex(Vertices.Item, itemId)
-      sender ! ItemInfo(item.toVertex)
+      try {
+        val graph = new NeoGraph()
+        val item = graph.getVertex(Vertices.Item, itemId)
+        sender ! ItemInfo(item.toVertex)
+      } catch {
+        case e: java.util.NoSuchElementException =>
+          sender ! ServiceException(StatusCodes.NotFound, "Item not found.", s"No Item with id=$itemId")
+      }
+
 
     case CreateItem(item: Item) =>
+      try {
       val graph = new NeoGraph()
       val createdItem = graph.addVertex(Vertices.Item, item)
       sender ! ItemCreated(createdItem.toVertex)
-
+      } catch {
+        case e: org.neo4j.driver.v1.exceptions.ClientException =>
+          sender ! ServiceException(StatusCodes.Conflict, "Item already exist.", s"Item with id=${item.itemId}")
+      }
   }
 }
