@@ -10,7 +10,7 @@ object GitlabConnector {
 }
 class GitlabConnector extends OutboundConnector {
 
-  override def auth: RawHeader = RawHeader("PRIVATE-TOKEN", "8x1eBEuJs_dTkrHBad9j")
+  override def auth: RawHeader = RawHeader("PRIVATE-TOKEN", glApiKey)
 
   override def receive: Receive = {
     case GetRepositories => exec(HttpMethods.GET, glProjectUrl)

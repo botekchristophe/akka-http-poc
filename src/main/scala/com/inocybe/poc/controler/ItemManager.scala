@@ -7,7 +7,7 @@ import com.inocybe.poc.core.ActorRegistry
 import com.inocybe.poc.outbound.GitlabConnector
 import spray.json.JsonParser
 import com.inocybe.poc.model.JsonProtocol._
-import com.inocybe.poc.model.exception.PfmException
+import com.inocybe.poc.model.exception.ServiceException
 import com.inocybe.poc.model.gitlab.GlProject
 import com.inocybe.poc.model.internal.Item
 import spray.json._
@@ -26,9 +26,8 @@ class ItemManager extends Controler {
     case id: Long                   =>
       items.get(id).isDefined match {
         case true   => sender ! ItemInfo(Item(id, items(id)))
-        case false  => sender ! PfmException(StatusCodes.NotFound, "Id not found.", s"No item with id=$id.")
+        case false  => sender ! ServiceException(StatusCodes.NotFound, "Id not found.", s"No item with id=$id.")
       }
-
 
     case i: Item                    =>
       items.put(i.id, i.name)

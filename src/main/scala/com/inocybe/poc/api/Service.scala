@@ -6,7 +6,7 @@ import akka.http.scaladsl.server.Directives._
 import com.inocybe.poc.api.Service._
 import com.inocybe.poc.model.JsonProtocol._
 import com.inocybe.poc.model.ModelObject
-import com.inocybe.poc.model.exception.{PfmException, PfmExceptions}
+import com.inocybe.poc.model.exception.{ServiceException, ServiceExceptions}
 import spray.json.{JsNumber, JsObject, _}
 
 import scala.util.{Failure, Success, Try}
@@ -42,17 +42,17 @@ trait Service {
     case Success(response: NoContent)         =>
       complete(HttpResponse(status = StatusCodes.NoContent))
 
-    case Success(e: PfmException)             =>
+    case Success(e: ServiceException)             =>
       complete(e.code.intValue(), e.marshall)
 
     case Failure(e: akka.pattern.AskTimeoutException) =>
-      complete(StatusCodes.ServiceUnavailable.intValue, PfmExceptions.TimeoutException(e.getMessage))
+      complete(StatusCodes.ServiceUnavailable.intValue, ServiceExceptions.TimeoutException(e.getMessage))
 
-    case Failure(e: PfmException)             =>
+    case Failure(e: ServiceException)             =>
       complete(e.code.intValue(), e.marshall)
 
     case Failure(e: Exception)                =>
-      complete(500, PfmExceptions.Default(e))
+      complete(500, ServiceExceptions.Default(e))
 
     case unknown: Any                         =>
       complete(500, unknown.toString)
