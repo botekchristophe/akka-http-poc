@@ -4,7 +4,7 @@ import akka.actor.ActorSystem
 import akka.http.scaladsl.Http
 import akka.stream.ActorMaterializer
 import akka.util.Timeout
-import com.inocybe.poc.api.OrderService
+import com.inocybe.poc.api.ItemService
 
 import scala.concurrent.duration._
 
@@ -23,7 +23,7 @@ object Boot {
 
     ActorRegistry.init(system)
 
-    val service = new OrderService(system)
+    val service = new ItemService(system)
 
     Http().bindAndHandle(service.route, "localhost", 8080)
   }

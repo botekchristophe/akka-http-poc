@@ -19,6 +19,8 @@ libraryDependencies ++= {
     "com.typesafe.akka"                       %%  "akka-http-spray-json"   % akkaHTTPv,
     "com.typesafe.akka"                       %%  "akka-http"              % akkaHTTPv,
     "com.typesafe.akka"                       %%  "akka-http-core"         % akkaHTTPv,
-    "com.typesafe.akka"                       %%  "akka-parsing"           % akkaHTTPv
+    "com.typesafe.akka"                       %%  "akka-parsing"           % akkaHTTPv,
+    "com.tinkerpop.blueprints"                %   "blueprints-core"        % "2.6.0",
+    "org.neo4j.driver"                        %   "neo4j-java-driver"      % "1.1.0"
   )
 }

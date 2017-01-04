@@ -20,26 +20,10 @@ class OrderService(system: ActorSystem)(implicit timeout: Timeout) extends Servi
 
   val route: Route =
     get {
-      pathPrefix("item" / LongNumber) { id =>
-        onComplete((itemManager ? id).asInstanceOf[Future[ItemCreated]]) { item =>
+      pathPrefix("repository") {
+        onComplete((itemManager ? "repository").asInstanceOf[Future[ItemInfo]]) { item =>
           futureHandler(item)
         }
       }
-    } ~
-      post {
-        path("create-order") {
-          entity(as[Item]) { item =>
-            onComplete((itemManager ? item).asInstanceOf[Future[ItemInfo]]) { msg =>
-              futureHandler(msg)
-            }
-          }
-        }
-      } ~
-      get {
-        pathPrefix("repository") {
-          onComplete((itemManager ? "repository").asInstanceOf[Future[ItemInfo]]) { item =>
-            futureHandler(item)
-          }
-        }
-      }
+    }
 }
