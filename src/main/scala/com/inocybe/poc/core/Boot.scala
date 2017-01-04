@@ -13,12 +13,16 @@ object Boot {
 
   def main(args: Array[String]) {
 
-    // needed to run the route
     implicit val system = ActorSystem()
+
     implicit val materializer = ActorMaterializer()
-    // needed for the future map/flatmap in the end
+
     implicit val executionContext = system.dispatcher
+
     implicit val timeout = Timeout(15.seconds)
+
+    ActorRegistry.init(system)
+
     val service = new OrderService(system)
 
     Http().bindAndHandle(service.route, "localhost", 8080)
